@@ -167,24 +167,31 @@ plt.show();
 
 from sklearn.cluster import DBSCAN
 
-X = np.asarray(df.loc[:,('latitude','longitude')])
-X
-clustering = DBSCAN(eps=1,min_samples = 90).fit(X)
-print(clustering.labels_)
+def cluster_mean(df):
 
-labels = clustering.labels_.reshape((-1,1))
-print(labels.shape)
-dat = np.append(X,labels,axis = 1)
+  X = np.asarray(df.loc[:,('latitude','longitude')])
+  
+  clustering = DBSCAN(eps=1,min_samples = 90).fit(X)
 
-cluster = pd.DataFrame(dat,columns=['Latitude','Longitude','Cluster Label'])
-mean_points = cluster.groupby('Cluster Label').mean()
-mean_points
-world_2 = gpd.read_file(gpd.datasets.get_path('naturalearth_lowres'))
-g_points = [Point(xy) for xy in zip(mean_points['Longitude'],mean_points['Latitude'])]
-geo_df = gpd.GeoDataFrame(mean_points,crs=crs,geometry = g_points)
-geo_df.head()
-fig,ax = plt.subplots(figsize = (20,20))
-world_map.plot(ax = ax,color = 'grey')
+  labels = clustering.labels_.reshape((-1,1))
+  
+  dat = np.append(X,labels,axis = 1)
 
-ctx.add_basemap(ax,source = providers['NASAGIBS.ViirsEarthAtNight2012'])
-geo_df.plot(ax = ax,markersize = 10,color = 'red')
+  cluster = pd.DataFrame(dat,columns=['Latitude','Longitude','Cluster Label'])
+  mean_points = cluster.groupby('Cluster Label').mean()
+
+  return mean_points
+ 
+def display_map():
+  mean_points=cluster_mean(df)
+  world_2 = gpd.read_file(gpd.datasets.get_path('naturalearth_lowres'))
+  g_points = [Point(xy) for xy in zip(mean_points['Longitude'],mean_points['Latitude'])]
+  geo_df = gpd.GeoDataFrame(mean_points,crs=crs,geometry = g_points)
+  geo_df.head()
+  fig,ax = plt.subplots(figsize = (20,20))
+  world_map.plot(ax = ax,color = 'grey')
+
+  ctx.add_basemap(ax,source = providers['NASAGIBS.ViirsEarthAtNight2012'])
+  geo_df.plot(ax = ax,markersize = 10,color = 'red')
+
+display_map()#calling the function
