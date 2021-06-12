@@ -1,0 +1,43 @@
+Spot That Fire V3.0
+
+Recent wildfires worldwide have demonstrated the importance of rapid wildfire detection, mitigation, and community impact assessment analysis. Your challenge is to develop and/or augment an existing application to detect, predict, and assess the economic impacts from actual or potential wildfires by leveraging high-frequency data from a new generation of geostationary satellites, data from polar-orbiting environmental satellites, and other open-source datasets.
+Wildfire Detection and Impact Analysis Model
+Summary
+
+This project is aimed at addressing the problems caused by forest fires and aims at mitigating loss as well as providing detailed information on the already existing rampant forest fires. Along with the current information, it also targets at predicting potential impacts of forest fires depending on set parameters. Coupled with this feature of detection and prediction of impact, we also offer the user an analysis page which provides information on how the current fire is currently spreading, the safe routes and the helpline numbers.
+
+How We Addressed This Challenge
+
+Wildfires can be both controllable and uncontrollable. There are various anthropogenic factors that lead to uncontrolled fires which are the most destructive in nature. Wildfires of varying intensity and extent can affect thousands of hectares of forest every year, immensely influencing the functioning of the ecosystem. Hence, it was important to take up this challenge which aims at detecting as well as predicting the impact of wildfires.
+
+In this challenge, Spot That Fire v3.0, the main aim of our project was to detect wildfires using the satellite data provided to us. As soon as we were sure they really were wildfires and not false positive results that were detected, it was essential to provide helpline numbers and to inform the users about the areas which are safe so that they can evacuate if needed.
+
+To be able to predict safe areas, we needed to predict the impact of the wildfire based on various factors pertaining to the characteristics of the region such as the weather. Furthermore, this would provide additional information about the size of the fire, which could help in being prepared to douse the fire efficiently. 
+
+We also aimed to add a feature where a user could report a wildfire and we have a CNN model that first verifies if it really is a wildfire or just a rumor.
+
+Finally, a web app to deploy the model was deployed to integrate all these features for better usability and utility.
+
+We hope this web app would help in detecting and predicting the impacts of wildfires, provide helpline numbers and be made better by providing more information regarding the impact viewed from various perspectives.
+
+How We Developed This Project
+
+As mentioned previously, we wanted to take up a challenge that has a direct application. with increase in climate change, we felt the need to do something to help detecting and predicting the impacts of wildfires.
+
+In our project, we use the FIRMS database (https://earthdata.nasa.gov/earth-observation-data/near-real-time/firms) that was provided to us to detect the wildfires. According to the confidence, not every red spot on the map is an actual wildfire. It could be glint from the sun as well. So, to reduce the chances of false positive results, we used a model to first focus on regions with more than a certain threshold value of dots. This allowed us to be sure that the remaining regions were wildfires and a lot of the isolated points were removed. 
+
+Next, we used DBSCAN to further form several clusters of these points. We further calculated the mean of each cluster to retrieve one pair of coordinates for each cluster. This gave us the Latitude and Longitude of the point.
+
+Using this Latitude and Longitude, we first retrieved the weather conditions of that place, namely, temperature, humidity and windspeed. This was achieved using an API. We developed another model to predict the impact of the wildfire. For this, we used a dataset which correlated weather conditions and location to predict the size of the fire. We divided the dataset into 6 classes based on the fire size, to make this into a classification problem. Using multiple decision trees, we predicted the fire size, in other words, the impact of the wildfire, utilizing the Latitude and Longitude that we got from the FIRMS database and the weather information that we received from the API.
+
+We also developed a model to detect a wildfire using user data, so that a user could also report a fire. to prevent fake news being reported, we used a CNN to first verify if the picture uploaded really was a wildfire or not.
+
+Finally, we integrated these features on our web app.
+
+To achieve this, we used Tensorflow and Keras for the CNN, geopandas for plotting the map with the detected points, sklearn DBSCAN for clustering, sklearn ExtraTreesRegressor and Open Weather API for the impact prediction and Flask for the web app. Most of the coding was done on Google Colab in Python3.
+
+Finding a suitable dataset as well as being able to access and utilise the dataset was the biggest challenge that we faced as a team.
+
+How We Used Space Agency Data in This Project
+
+FIRMS data was used in our project. it was the main data that we built our project around. According to the confidence, not every red spot on the map is an actual wildfire as it could be glint from the sun as well. So, to reduce the chances of false positive results, we used a model to first focus on regions with more than a certain threshold value of dots. This allowed us to be sure that the remaining regions were wildfires and a lot of the isolated points were removed. Once we got the means of each cluster, we found the latitude and longitude from the FIRMS data.
